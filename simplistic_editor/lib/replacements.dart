@@ -57,10 +57,11 @@ class TextEditingInlineSpanReplacement {
   TextEditingInlineSpanReplacement? onDelete(TextEditingDeltaDeletion delta) {
     final TextRange deletedRange = delta.deletedRange;
     final int deletedLength = delta.textDeleted.length;
+    final TextEditingInlineSpanReplacement replacement = copy(expand: true);
 
     if (range.start >= deletedRange.start
         && (range.start < deletedRange.end && range.end > deletedRange.end)) {
-      return copy(
+      return replacement.copy(
         range: TextRange(
           start: deletedRange.end - deletedLength,
           end: range.end - deletedLength,
@@ -68,14 +69,14 @@ class TextEditingInlineSpanReplacement {
       );
     } else if ((range.start < deletedRange.start && range.end > deletedRange.start)
         && range.end <= deletedRange.end) {
-      return copy(
+      return replacement.copy(
         range: TextRange(
           start: range.start,
           end: deletedRange.start,
         ),
       );
     } else if (range.start < deletedRange.start && range.end > deletedRange.end) {
-      return copy(
+      return replacement.copy(
         range: TextRange(
           start: range.start,
           end: range.end - deletedLength,
@@ -84,14 +85,14 @@ class TextEditingInlineSpanReplacement {
     } else if (range.start >= deletedRange.start && range.end <= deletedRange.end) {
       return null;
     } else if (range.start > deletedRange.start && range.start >= deletedRange.end) {
-      return copy(
+      return replacement.copy(
         range: TextRange(
           start: range.start - deletedLength,
           end: range.end - deletedLength,
         ),
       );
     } else if (range.end <= deletedRange.start && range.end < deletedRange.end) {
-      return copy(
+      return replacement.copy(
         range: TextRange(
           start: range.start,
           end: range.end,
@@ -291,6 +292,8 @@ class TextEditingInlineSpanReplacement {
       if (range.start != delta.selection.start && range.end != delta.selection.end) {
         return null;
       }
+    } else {
+      return copy(expand: true);
     }
     return this;
   }

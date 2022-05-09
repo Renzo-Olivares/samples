@@ -543,6 +543,9 @@ class BasicTextInputClientState extends State<BasicTextInputClient>
 
     final bool selectionChanged = _value.selection != value.selection;
 
+    final bool selectionRangeChanged = _value.selection.start != value.selection.start
+        || _value.selection.end != value.selection.end;
+
     if (cause == SelectionChangedCause.drag || cause == SelectionChangedCause.longPress || cause == SelectionChangedCause.tap) {
       // Here the change is coming from gestures which call on RenderEditable to change the selection.
       // Create a TextEditingDeltaNonTextUpdate so we can keep track of the delta history. RenderEditable
@@ -554,15 +557,12 @@ class BasicTextInputClientState extends State<BasicTextInputClient>
             selection: value.selection,
             composing: value.composing,
         );
-        if (widget.controller is ReplacementTextEditingController) {
+        if (widget.controller is ReplacementTextEditingController && selectionRangeChanged) {
           (widget.controller as ReplacementTextEditingController).syncReplacementRanges(selectionUpdate);
         }
         textEditingDeltaHistoryManager.updateTextEditingDeltaHistoryOnInput([selectionUpdate]);
       }
     }
-
-    final bool selectionRangeChanged = _value.selection.start != value.selection.start
-        || _value.selection.end != value.selection.end;
 
     _value = value;
 
