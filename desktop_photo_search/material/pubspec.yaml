@@ -36,7 +36,7 @@ dev_dependencies:
   async: ^2.8.2
   build: ^2.2.1
   build_runner: ^2.1.7
-  built_value_generator: ^8.3.0
+  built_value_generator: ^8.3.3
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
