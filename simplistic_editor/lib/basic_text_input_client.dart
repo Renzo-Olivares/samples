@@ -65,7 +65,7 @@ class BasicTextInputClientState extends EditableTextState implements DeltaTextIn
     if (value == _value) {
       return;
     }
-    
+
     updateEditingValue(value);
 
     textEditingDeltaHistoryManager
